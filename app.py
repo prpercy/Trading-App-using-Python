@@ -2,6 +2,7 @@ import fire
 import questionary as qs
 import sqlalchemy as sql
 from user.user import load_authentication
+from finta import TA
 
 def request_user_service():
     
