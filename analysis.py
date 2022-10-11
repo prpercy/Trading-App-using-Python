@@ -22,4 +22,12 @@ df = db.quote()
 df['SMA'] = TA.SMA(df, 50)
 
 print(df)
-                           
+
+plt.figure(figsize=(12,7))
+plt.plot('Close', data=df, label='Close Price Google', color ='blue', linewidth=1)
+plt.plot('SMA', data=df, label='Simple Moving Average', color='Red', linewidth=1)
+
+plt.xlabel('Date')
+plt.ylabel('Stock Price')
+plt.legend()
+plt.show()
