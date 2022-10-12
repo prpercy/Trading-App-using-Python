@@ -43,7 +43,20 @@ def update_user_fund(user_df):
         "Please enter the amount you would like to trade"
     ).ask()
     
+    user_df['user_available_to_trade'].iloc[0] = user_funds
+    
     # update user details into the database in user table
+    db_engine = get_db_engine()
+    
+    user_query = f"""
+    UPDATE user 
+    SET user_available_to_trade = '{user_df['user_available_to_trade'].iloc[0]}'
+    WHERE user_name ='{user_df['user_name'].iloc[0]}'
+    """
+    db_engine.execute(user_query)
+     
+    print(f'User {user_df["user_name"].iloc[0]} available trade amount is updated to {user_df["user_available_to_trade"].iloc[0]}')
+    
     print('updated the funds into database')
     
     return True
@@ -86,14 +99,22 @@ def request_user_credentials():
     user_df = pd.DataFrame({'user_name' : user_name, 'user_password': user_password}, index=[0])
     return user_df
 
-# Define function to initiate the user authentication module (Sign up, sign in etc)
-def load_authentication():
-    print('.....inside load authentication......')
-     # Create a database connection string
+# create database engine
+def get_db_engine():
+    # Create a database connection string
     db_connection_string = 'sqlite:///./resources/app.db'
     
     # Create a database engine
     db_engine = sql.create_engine(db_connection_string)
+    
+    return db_engine
+
+
+# Define function to initiate the user authentication module (Sign up, sign in etc)
+def load_authentication():
+    print('.....inside load authentication......')
+
+    db_engine = get_db_engine()
     
     # Check if user table already exists; if not, create one
     if len(db_engine.table_names()) == 0:
@@ -184,5 +205,13 @@ def sign_in_user(user_df, db_engine):
 
 # function to delete user from the database (from user table)
 def delete_user(user_df):
-    print('user is deleted')
+    db_engine = get_db_engine()
+    
+    user_query = f"""
+    DELETE FROM user 
+    WHERE user_name ='{user_df['user_name'].iloc[0]}'
+    """
+    db_engine.execute(user_query)
+     
+    print(f'User {user_df["user_name"].iloc[0]} is successfully deleted from the database.')
     return True

@@ -22,7 +22,7 @@ def run():
     execute_user_choice(user_df, user_choice)
     
     # Ask what would user like to do next, namely, 
-    #  (1) trade (2) update user available fund to trade (3) delete the user (4) analyse the portfolio if exists (5) generate reports
+    #  (1) trade stocks (2) update user available fund to trade (3) delete the user (4) analyse the stock or portfolio if exists
     
     #request_user_service()
    
