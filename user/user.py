@@ -28,7 +28,15 @@ class NameValidator(Validator):
 
 # function to load user options
 def load_user_options():
-    signed_in_user_choices = ['Update available amount for trading', 'Stock Analysis','Portfolio Analysis', 'Trade Stocks' , 'Delete User']
+    signed_in_user_choices = [
+        'Update available amount for trading', 
+        'Stock Analysis',
+        'Portfolio Analysis', 
+        'Trade Stocks', 
+        'Delete User', 
+        'Exit the application'
+    ]
+    
     user_choice = qs.select(
         "What would you like to do?",
         choices=signed_in_user_choices
@@ -81,8 +89,10 @@ def execute_user_choice(user_df, user_choice):
             choices=trade_stock_choices
         ).ask()
         perform_trade_stock(user_trade_choice,user_df)
-    else:
+    elif user_choice == 'Delete User':
         delete_user(user_df)
+    else:
+        exit()
        
     return True
 
@@ -109,6 +119,28 @@ def get_db_engine():
     
     return db_engine
 
+# initiate database tables
+def initiate_database_tables(db_engine):
+    create_user_table = """
+           CREATE TABLE user (
+            user_name VAR PRIMARY KEY,
+            user_password VAR,
+            user_available_to_trade DOUBLE
+        )
+        """
+    db_engine.execute(create_user_table)
+        
+    create_portfolio_table = """
+        CREATE TABLE portfolio (
+            ticker VAR PRIMARY KEY,
+            number_of_shares DOUBLE,
+            user_name VAR,
+            FOREIGN KEY (user_name) REFERENCES user(user_name)
+        )
+        """
+    db_engine.execute(create_portfolio_table)
+        
+    return True
 
 # Define function to initiate the user authentication module (Sign up, sign in etc)
 def load_authentication():
@@ -118,16 +150,8 @@ def load_authentication():
     
     # Check if user table already exists; if not, create one
     if len(db_engine.table_names()) == 0:
-        create_user_table = """
-        CREATE TABLE user (
-            user_name VAR PRIMARY KEY,
-            user_password VAR,
-            user_available_to_trade DOUBLE
-        )
-        """
-        db_engine.execute(create_user_table)
-    
-      
+        initiate_database_tables(db_engine)
+     
     new_user_choices = ['Yes', 'No']
     # ask whether its a new user
     new_user = qs.select(
