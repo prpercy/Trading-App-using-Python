@@ -25,124 +25,6 @@ class NameValidator(Validator):
             )
 
 
-
-# function to load user options
-def load_user_options():
-    signed_in_user_choices = [
-        'Update available amount for trading', 
-        'Stock Analysis',
-        'Portfolio Analysis', 
-        'Trade Stocks', 
-        'Delete User', 
-        'Exit the application'
-    ]
-    
-    user_choice = qs.select(
-        "What would you like to do?",
-        choices=signed_in_user_choices
-    ).ask()
-       
-    return user_choice
-
-
-# update user fund i.e. amount available to trade for user
-def update_user_fund(user_df):
-    user_funds = qs.text(
-        "Please enter the amount you would like to trade"
-    ).ask()
-    
-    user_df['user_available_to_trade'].iloc[0] = user_funds
-    
-    # update user details into the database in user table
-    db_engine = get_db_engine()
-    
-    user_query = f"""
-    UPDATE user 
-    SET user_available_to_trade = '{user_df['user_available_to_trade'].iloc[0]}'
-    WHERE user_name ='{user_df['user_name'].iloc[0]}'
-    """
-    db_engine.execute(user_query)
-     
-    print(f'User {user_df["user_name"].iloc[0]} available trade amount is updated to {user_df["user_available_to_trade"].iloc[0]}')
-    
-    print('updated the funds into database')
-    
-    return True
-
-# function to load user options
-def execute_user_choice(user_df, portfolio_df, user_choice):
-    if user_choice == 'Update available amount for trading':
-        update_user_fund(user_df)
-    elif user_choice == 'Stock Analysis':
-        print('perform stock analysis')
-        user_stock = qs.text(
-            "Please enter the stock you would like to analyse"
-        ).ask()
-        perform_stock_analysis(user_stock, portfolio_df, user_df)
-    elif user_choice == 'Portfolio Analysis':
-        print('perform portfolio analysis...')
-        perform_portfolio_analysis(user_df, portfolio_df)
-    elif user_choice == 'Trade Stocks':
-        trade_stock_choices = ['Buy', 'Sell']
-        user_trade_choice = qs.select(
-            "What would you like to do?",
-            choices=trade_stock_choices
-        ).ask()
-        user_df, portfolio_df = perform_trade_stock(user_trade_choice,user_df, portfolio_df)
-    elif user_choice == 'Delete User':
-        delete_user(user_df)
-        exit()
-    else:
-        exit()
-       
-    return user_df, portfolio_df
-
-# function to request user to input user name and password
-def request_user_credentials():
-    user_name = qs.text(
-        "Please enter your username",
-        validate=NameValidator
-    ).ask()
-  
-    user_password = qs.text(
-        "Please enter your password"
-    ).ask()
-    user_df = pd.DataFrame({'user_name' : user_name, 'user_password': user_password}, index=[0])
-    return user_df
-
-# create database engine
-def get_db_engine():
-    # Create a database connection string
-    db_connection_string = 'sqlite:///./resources/app.db'
-    
-    # Create a database engine
-    db_engine = sql.create_engine(db_connection_string)
-    
-    return db_engine
-
-# initiate database tables
-def initiate_database_tables(db_engine):
-    create_user_table = """
-           CREATE TABLE user (
-            user_name VAR PRIMARY KEY,
-            user_password VAR,
-            user_available_to_trade DOUBLE
-        )
-        """
-    db_engine.execute(create_user_table)
-        
-    create_portfolio_table = """
-        CREATE TABLE portfolio (
-            ticker VAR PRIMARY KEY,
-            number_of_shares DOUBLE,
-            user_name VAR,
-            FOREIGN KEY (user_name) REFERENCES user(user_name)
-        )
-        """
-    db_engine.execute(create_portfolio_table)
-        
-    return True
-
 # Define function to initiate the user authentication module (Sign up, sign in etc)
 def load_authentication():
     print('.....inside load authentication......')
@@ -192,6 +74,126 @@ def load_authentication():
     print('.....End of load authentication......')
     return user_df, portfolio_df
 
+
+# function to load user options
+def load_user_options():
+    signed_in_user_choices = [
+        'Update available amount for trading', 
+        'Stock Analysis',
+        'Portfolio Analysis', 
+        'Trade Stocks', 
+        'Delete User', 
+        'Exit the application'
+    ]
+    
+    user_choice = qs.select(
+        "What would you like to do?",
+        choices=signed_in_user_choices
+    ).ask()
+       
+    return user_choice
+
+
+
+
+# function to load user options
+def execute_user_choice(user_df, portfolio_df, user_choice):
+    if user_choice == 'Update available amount for trading':
+        user_df = update_user_fund(user_df)
+    elif user_choice == 'Stock Analysis':
+        print('perform stock analysis')
+        user_stock = qs.text(
+            "Please enter the stock you would like to analyse"
+        ).ask()
+        perform_stock_analysis(user_stock, portfolio_df, user_df)
+    elif user_choice == 'Portfolio Analysis':
+        print('perform portfolio analysis...')
+        perform_portfolio_analysis(user_df, portfolio_df)
+    elif user_choice == 'Trade Stocks':
+        trade_stock_choices = ['Buy', 'Sell']
+        user_trade_choice = qs.select(
+            "What would you like to do?",
+            choices=trade_stock_choices
+        ).ask()
+        user_df, portfolio_df = perform_trade_stock(user_trade_choice,user_df, portfolio_df)
+    elif user_choice == 'Delete User':
+        delete_user(user_df)
+        exit()
+    else:
+        exit()
+       
+    return user_df, portfolio_df
+
+# update user fund i.e. amount available to trade for user
+def update_user_fund(user_df):
+    user_funds = qs.text(
+        "Please enter the amount you would like to trade"
+    ).ask()
+    
+    user_df['user_available_to_trade'].iloc[0] = user_funds
+    
+    # update user details into the database in user table
+    db_engine = get_db_engine()
+    
+    user_query = f"""
+    UPDATE user 
+    SET user_available_to_trade = '{user_df['user_available_to_trade'].iloc[0]}'
+    WHERE user_name ='{user_df['user_name'].iloc[0]}'
+    """
+    db_engine.execute(user_query)
+     
+    print(f'User {user_df["user_name"].iloc[0]} available trade amount is updated to {user_df["user_available_to_trade"].iloc[0]}')
+    
+    print('updated the funds into database')
+    
+    return user_df
+
+
+# function to request user to input user name and password
+def request_user_credentials():
+    user_name = qs.text(
+        "Please enter your username",
+        validate=NameValidator
+    ).ask()
+  
+    user_password = qs.text(
+        "Please enter your password"
+    ).ask()
+    user_df = pd.DataFrame({'user_name' : user_name, 'user_password': user_password}, index=[0])
+    return user_df
+
+# create database engine
+def get_db_engine():
+    # Create a database connection string
+    db_connection_string = 'sqlite:///./resources/app.db'
+    
+    # Create a database engine
+    db_engine = sql.create_engine(db_connection_string)
+    
+    return db_engine
+
+# initiate database tables
+def initiate_database_tables(db_engine):
+    create_user_table = """
+           CREATE TABLE user (
+            user_name VAR PRIMARY KEY,
+            user_password VAR,
+            user_available_to_trade DOUBLE
+        )
+        """
+    db_engine.execute(create_user_table)
+        
+    create_portfolio_table = """
+        CREATE TABLE portfolio (
+            ticker VAR PRIMARY KEY,
+            number_of_shares DOUBLE,
+            user_name VAR,
+            FOREIGN KEY (user_name) REFERENCES user(user_name)
+        )
+        """
+    db_engine.execute(create_portfolio_table)
+        
+    return True
 
 # function to inser user details into database
 def create_user(user_df,db_engine):
