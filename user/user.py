@@ -70,7 +70,7 @@ def update_user_fund(user_df):
     return True
 
 # function to load user options
-def execute_user_choice(user_df, user_choice):
+def execute_user_choice(user_df, portfolio_df, user_choice):
     if user_choice == 'Update available amount for trading':
         update_user_fund(user_df)
     elif user_choice == 'Stock Analysis':
@@ -78,23 +78,24 @@ def execute_user_choice(user_df, user_choice):
         user_stock = qs.text(
             "Please enter the stock you would like to analyse"
         ).ask()
-        perform_stock_analysis(user_stock,user_df)
+        perform_stock_analysis(user_stock, portfolio_df, user_df)
     elif user_choice == 'Portfolio Analysis':
         print('perform portfolio analysis...')
-        perform_portfolio_analysis(user_df)
+        perform_portfolio_analysis(user_df, portfolio_df)
     elif user_choice == 'Trade Stocks':
         trade_stock_choices = ['Buy', 'Sell']
         user_trade_choice = qs.select(
             "What would you like to do?",
             choices=trade_stock_choices
         ).ask()
-        perform_trade_stock(user_trade_choice,user_df)
+        user_df, portfolio_df = perform_trade_stock(user_trade_choice,user_df, portfolio_df)
     elif user_choice == 'Delete User':
         delete_user(user_df)
+        exit()
     else:
         exit()
        
-    return True
+    return user_df, portfolio_df
 
 # function to request user to input user name and password
 def request_user_credentials():
@@ -171,6 +172,7 @@ def load_authentication():
                 user_df['user_available_to_trade'] = user_available_to_trade
                 # add user details into the database
                 user_df = create_user(user_df,db_engine)
+                portfolio_df = pd.DataFrame()
                 break
             except Exception as ex:
                 print(ex)
@@ -182,13 +184,13 @@ def load_authentication():
             try:
                 user_df = request_user_credentials()
                 # check if user is in db..if not raise incorrect username or password error
-                user_df = sign_in_user(user_df,db_engine)
+                user_df, portfolio_df = sign_in_user(user_df,db_engine)
                 break
             except Exception as ex:
                 print(ex)
         
     print('.....End of load authentication......')
-    return user_df
+    return user_df, portfolio_df
 
 
 # function to inser user details into database
@@ -217,6 +219,19 @@ def sign_in_user(user_df, db_engine):
     if user_db_df['user_password'].iloc[0] == user_df['user_password'].iloc[0]:
         print('Login successful')
         print(f'Funds available to trade for you are {user_db_df["user_available_to_trade"].iloc[0]}')
+        
+        # retrieve user portfolio details
+        user_portfolio_query = f"""
+            SELECT 
+                ticker, number_of_shares 
+            FROM 
+                portfolio 
+            WHERE user_name ='{user_df['user_name'].iloc[0]}'
+        """
+        portfolio_df = pd.read_sql_query(user_portfolio_query, db_engine)
+        print(portfolio_df)
+        
+        
     elif user_db_df['user_name'].iloc[0] == user_df['user_name'].iloc[0]:
         print('Login unsuccessful')
         print('Incorrect user password. Please enter correct password.')
@@ -224,7 +239,7 @@ def sign_in_user(user_df, db_engine):
     else:
         print('Login unsuccessful')
         print('Incorrect user name. Please enter correct user name or sign up.')
-    return user_db_df
+    return user_db_df, portfolio_df
 
 
 # function to delete user from the database (from user table)

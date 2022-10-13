@@ -4,7 +4,7 @@
 import questionary as qs
 import pandas as pd
 
-def perform_trade_stock(user_trade_choice,user_df):
+def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     
     # Ask user which stock it would like to trade
     user_stock = qs.text(
@@ -23,12 +23,33 @@ def perform_trade_stock(user_trade_choice,user_df):
     trade_amount = no_of_stock*current_stock_price
     user_available_to_trade = float(user_df['user_available_to_trade'].iloc[0])
     
-    # check if user's available trade amount is greater than stock trade amount 
-    pd.options.mode.chained_assignment = None
-    if user_available_to_trade > trade_amount:
-        user_df['user_available_to_trade'].iloc[0] = user_available_to_trade - trade_amount
-        print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
-    else:
-        print(f'You have insufficient available amount to trade. You need more than {trade_amount} to complete this transaction')
+    if user_trade_choice == 'Buy':
+        # check if user's available trade amount is greater than stock trade amount 
+        pd.options.mode.chained_assignment = None
+        if user_available_to_trade >= trade_amount:
+            user_df['user_available_to_trade'].iloc[0] = user_available_to_trade - trade_amount
+            print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
+            portfolio_df = portfolio_df.append({'ticker': user_stock, 'number_of_shares' : no_of_stock}, ignore_index=True)
+            print(portfolio_df)
 
-    return user_df
+        else:
+            print(f'You have insufficient available amount to trade. You need more than {trade_amount} to complete this transaction')
+    else:
+        # check if user portfolio has those stocks to sell at the present (no naked short permissible at this moment)
+        idx = portfolio_df.index[portfolio_df['ticker'] == user_stock]
+        number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
+     
+        if no_of_stock >= number_of_shares:
+            print(f' You sold {number_of_shares} stocks of {user_stock}')
+            portfolio_df = portfolio_df.drop(idx)
+            trade_amount = number_of_shares*current_stock_price
+        else:
+            print(f' You sold {no_of_stock} stocks of {user_stock}')
+            portfolio_df.at[idx, 'number_of_shares'] = number_of_shares - no_of_stock
+          
+        # since its a sell. increase the available trade amount by sales proceeds
+        user_df['user_available_to_trade'].iloc[0] = user_available_to_trade + trade_amount
+        
+       
+
+    return user_df, portfolio_df

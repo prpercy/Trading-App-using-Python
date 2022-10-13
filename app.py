@@ -8,7 +8,7 @@ def run():
     """The main function for running the script."""
   
     # Run user authentication program
-    user_df = load_authentication()
+    user_df, portfolio_df = load_authentication()
     
     print(user_df.head())
     
@@ -20,7 +20,7 @@ def run():
         user_choice = load_user_options()
         
         # execute user choice
-        execute_user_choice(user_df, user_choice)
+        user_df, portfolio_df = execute_user_choice(user_df, portfolio_df, user_choice)
         
         # only exit this loop when user wants to get out of application and chooses explicitly to do so.
 
