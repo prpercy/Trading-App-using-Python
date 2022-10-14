@@ -6,6 +6,7 @@
 import questionary as qs
 import pandas as pd
 import yfinance as yf
+import utils
 
 def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     
@@ -47,8 +48,20 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             if idx.size > 0:
                 number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
                 portfolio_df.at[idx, 'number_of_shares'] = number_of_shares + no_of_stock
+                portfolio_sql_query = f"""
+                    UPDATE portfolio
+                    SET number_of_shares = {number_of_shares + no_of_stock}
+                    WHERE ticker = '{user_stock}' AND user_name = '{user_df['user_name'].iloc[0]}'
+                """
             else:
                 portfolio_df = portfolio_df.append({'ticker': user_stock, 'number_of_shares' : no_of_stock}, ignore_index=True)
+                portfolio_sql_query = f"""
+                    INSERT INTO
+                         portfolio (ticker, number_of_shares, user_name)
+                    VALUES
+                        ('{user_stock}', {no_of_stock}, '{user_df['user_name'].iloc[0]}')
+                """
+                
             print(portfolio_df)
         else:
             print(f'You have insufficient available amount to trade. You need more than {trade_amount} to complete this transaction')
@@ -58,16 +71,28 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             print(f' You sold {number_of_shares} stocks of {user_stock}')
             portfolio_df = portfolio_df.drop(idx)
             trade_amount = number_of_shares*current_stock_price
+            portfolio_sql_query = f"""
+                DELETE FROM portfolio WHERE ticker = '{user_stock}' AND user_name = '{user_df['user_name'].iloc[0]}'
+            """
         else:
             print(f' You sold {no_of_stock} stocks of {user_stock}')
             portfolio_df.at[idx, 'number_of_shares'] = number_of_shares - no_of_stock
+            portfolio_sql_query = f"""
+                UPDATE portfolio
+                SET number_of_shares = {number_of_shares - no_of_stock}
+                WHERE ticker = '{user_stock}' AND user_name = '{user_df['user_name'].iloc[0]}'
+            """
           
         # since its a sell. increase the available trade amount by sales proceeds
         user_df['user_available_to_trade'].iloc[0] = user_available_to_trade + trade_amount
-        
-     # write a code to save this portfolio_df into PORTFOLIO table  
-     # currently the portfolio_df only has tickers and number of shares data..it does not have user_name...user_name can be found in user_df
-     # so you have to create a new df let us say portfolio_db_df which has all 3 elements -tickers, number of shares and user name
-     # then u can use dataframe.to_sql method to save it in db.
+    
+    user_sql_query = f"""
+    UPDATE user 
+    SET user_available_to_trade = '{user_df['user_available_to_trade'].iloc[0]}'
+    WHERE user_name ='{user_df['user_name'].iloc[0]}'
+    """
+    db_engine = utils.get_db_engine()
+    db_engine.execute(portfolio_sql_query)
+    db_engine.execute(user_sql_query)
     
     return user_df, portfolio_df
