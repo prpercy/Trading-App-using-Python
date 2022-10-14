@@ -102,7 +102,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
         user_df['user_available_to_trade'].iloc[0] = user_available_to_trade + trade_amount
     #if there is a loss, we will decrease the available trade amount of sales loss
     
-    #we will the nupdate all transaction into the user dataframe
+    #we will then update all transactions into the user dataframe
     user_sql_query = f"""
     UPDATE user 
     SET user_available_to_trade = '{user_df['user_available_to_trade'].iloc[0]}'
