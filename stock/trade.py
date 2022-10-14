@@ -19,7 +19,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     ).ask())
     
     # Get stock's current price using alpaca sdk; right now just adding dummy price of 100
-    current_stock_price = 100
+    current_stock_price = 100 # write actual code here to get current price
     
     # calculate total trade amount
     trade_amount = no_of_stock*current_stock_price
@@ -33,7 +33,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
             portfolio_df = portfolio_df.append({'ticker': user_stock, 'number_of_shares' : no_of_stock}, ignore_index=True)
             print(portfolio_df)
-
+            
         else:
             print(f'You have insufficient available amount to trade. You need more than {trade_amount} to complete this transaction')
     else:
@@ -52,6 +52,9 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
         # since its a sell. increase the available trade amount by sales proceeds
         user_df['user_available_to_trade'].iloc[0] = user_available_to_trade + trade_amount
         
-       
-
+     # write a code to save this portfolio_df into PORTFOLIO table  
+     # currently the portfolio_df only has tickers and number of shares data..it does not have user_name...user_name can be found in user_df
+     # so you have to create a new df let us say portfolio_db_df which has all 3 elements -tickers, number of shares and user name
+     # then u can use dataframe.to_sql method to save it in db.
+    
     return user_df, portfolio_df
