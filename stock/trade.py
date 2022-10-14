@@ -46,7 +46,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             user_df['user_available_to_trade'].iloc[0] = user_available_to_trade - trade_amount
             #will return message of successful order of a 'buy' with the 'number of shares' and the 'stock ticker'
             print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
-            #
+            #once purchased, will query to add the stock to the users portfolio data frame
             if idx.size > 0:
                 number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
                 portfolio_df.at[idx, 'number_of_shares'] = number_of_shares + no_of_stock
@@ -55,6 +55,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
                     SET number_of_shares = {number_of_shares + no_of_stock}
                     WHERE ticker = '{user_stock}' AND user_name = '{user_df['user_name'].iloc[0]}'
                 """
+                #then it will add the stock to the users porfolio data frame
             else:
                 portfolio_df = portfolio_df.append({'ticker': user_stock, 'number_of_shares' : no_of_stock}, ignore_index=True)
                 portfolio_sql_query = f"""
@@ -65,17 +66,29 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
                 """
                 
             print(portfolio_df)
+            
+            #if user has insufficient funds, will return a message that the user requires "more than the trade amount to complete the transaction"
         else:
             print(f'You have insufficient available amount to trade. You need more than {trade_amount} to complete this transaction')
+            
+    #code for user deciding to sell shares of a stock
     else:
         number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
+        
+        #if the number of shares in their portfolio is equal to the number of stocks they are selling, then we will delete the stock from the portfolio
         if no_of_stock >= number_of_shares:
+            #once sell order meets requirements, will return a message of a successful sell of the "number" of the specific "stock"
             print(f' You sold {number_of_shares} stocks of {user_stock}')
+            #will now drop the specific amount of shares from the portfolio data frame 
             portfolio_df = portfolio_df.drop(idx)
+            #will calculate the total value of shares sold
             trade_amount = number_of_shares*current_stock_price
+            #will delete specific stock/stock amount from the portfolio
             portfolio_sql_query = f"""
                 DELETE FROM portfolio WHERE ticker = '{user_stock}' AND user_name = '{user_df['user_name'].iloc[0]}'
             """
+        #if the number of shares in their portfolio is less than the number of stocks they are selling, then we will update the portfoliio with the new amount 
+        #of shares of the particular stock
         else:
             print(f' You sold {no_of_stock} stocks of {user_stock}')
             portfolio_df.at[idx, 'number_of_shares'] = number_of_shares - no_of_stock
@@ -87,7 +100,9 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
           
         # since its a sell. increase the available trade amount by sales proceeds
         user_df['user_available_to_trade'].iloc[0] = user_available_to_trade + trade_amount
+    #if there is a loss, we will decrease the available trade amount of sales loss
     
+    #we will the nupdate all transaction into the user dataframe
     user_sql_query = f"""
     UPDATE user 
     SET user_available_to_trade = '{user_df['user_available_to_trade'].iloc[0]}'
