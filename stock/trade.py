@@ -42,9 +42,11 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     if user_trade_choice == 'Buy':
         # check if user's available trade amount is greater than stock trade amount 
         if user_available_to_trade >= trade_amount:
+            #once trade amount is confirmed for purchase, amount will be deducted from total trading funds
             user_df['user_available_to_trade'].iloc[0] = user_available_to_trade - trade_amount
+            #will return message of successful order of a 'buy' with the 'number of shares' and the 'stock ticker'
             print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
-            
+            #
             if idx.size > 0:
                 number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
                 portfolio_df.at[idx, 'number_of_shares'] = number_of_shares + no_of_stock
