@@ -5,22 +5,29 @@
 
 import questionary as qs
 import pandas as pd
+import yfinance as yf
 
 def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     
-    # Ask user which stock it would like to trade
-    user_stock = qs.text(
-            f'Please enter the stock you would like to {user_trade_choice}'
-    ).ask()
+    while True:
+        try:
+            # Ask user which stock it would like to trade
+            user_stock = qs.text(
+                    f'Please enter the stock you would like to {user_trade_choice}'
+            ).ask()
+
+            # Ask user how many shares of the given stock it would like to trade
+            no_of_stock = float(qs.text(
+                    f'Please enter the number of shares you would like to {user_trade_choice}'
+            ).ask())
     
-    # Ask user how many shares of the given stock it would like to trade
-    no_of_stock = float(qs.text(
-            f'Please enter the number of shares you would like to {user_trade_choice}'
-    ).ask())
-    
-    # Get stock's current price using alpaca sdk; right now just adding dummy price of 100
-    current_stock_price = 100 # write actual code here to get current price
-    
+            # Get stock's current price using alpaca sdk; right now just adding dummy price of 100
+            current_stock_price = yf.Ticker(user_stock).history(period='1d')['Close'][0]
+            break
+        except Exception as ex:
+            print(f'Incorrect stock Ticker name provided as input')
+            print(ex)
+         
     # calculate total trade amount
     trade_amount = no_of_stock*current_stock_price
     user_available_to_trade = float(user_df['user_available_to_trade'].iloc[0])
