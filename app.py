@@ -6,7 +6,7 @@ from user.user import load_authentication, load_user_options, execute_user_choic
             
 def run():
     """The main function for running the script."""
-  
+    
     # Run user authentication program
     user_df, portfolio_df = load_authentication()
     
@@ -15,8 +15,13 @@ def run():
     while True:
         # present user choices after successful login
         # Ask what would user like to do next, namely, 
-        # (1) Update available amount for trading (2) Stock Analysis (3) Portfolio Analysis (4) Trade Stocks 
-        # (5) Delete User (6) Exit the application
+            # 'Update available amount for trading', 
+            # 'Trade Stocks', 
+            # 'View current portfolio',
+            # 'Stock Analysis',
+            # 'Portfolio Analysis', 
+            # 'Delete User', 
+            # 'Exit the application'
         user_choice = load_user_options()
         
         # execute user choice

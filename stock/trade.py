@@ -25,22 +25,28 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     trade_amount = no_of_stock*current_stock_price
     user_available_to_trade = float(user_df['user_available_to_trade'].iloc[0])
     
+    # check if user portfolio has those stocks to buy/sell at the present (no naked short permissible at this moment)
+    idx = portfolio_df.index[portfolio_df['ticker'] == user_stock]
+    if (idx.size == 0) & (user_trade_choice == 'Sell'):
+        print(f'You can not {user_trade_choice} {user_stock} as you do not have it in your portfolio')
+        return user_df, portfolio_df
+    
     if user_trade_choice == 'Buy':
         # check if user's available trade amount is greater than stock trade amount 
-        pd.options.mode.chained_assignment = None
         if user_available_to_trade >= trade_amount:
             user_df['user_available_to_trade'].iloc[0] = user_available_to_trade - trade_amount
             print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
-            portfolio_df = portfolio_df.append({'ticker': user_stock, 'number_of_shares' : no_of_stock}, ignore_index=True)
-            print(portfolio_df)
             
+            if idx.size > 0:
+                number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
+                portfolio_df.at[idx, 'number_of_shares'] = number_of_shares + no_of_stock
+            else:
+                portfolio_df = portfolio_df.append({'ticker': user_stock, 'number_of_shares' : no_of_stock}, ignore_index=True)
+            print(portfolio_df)
         else:
             print(f'You have insufficient available amount to trade. You need more than {trade_amount} to complete this transaction')
     else:
-        # check if user portfolio has those stocks to sell at the present (no naked short permissible at this moment)
-        idx = portfolio_df.index[portfolio_df['ticker'] == user_stock]
         number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
-     
         if no_of_stock >= number_of_shares:
             print(f' You sold {number_of_shares} stocks of {user_stock}')
             portfolio_df = portfolio_df.drop(idx)
