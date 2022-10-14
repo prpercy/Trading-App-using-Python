@@ -4,25 +4,13 @@
 import sqlalchemy as sql
 import pandas as pd
 import questionary as qs
-from questionary import Validator, ValidationError, prompt
+import utils
 from portfolio.portfolio import perform_portfolio_analysis
 from stock.stock import perform_stock_analysis
 from stock.trade import perform_trade_stock
 
 #user5
-# class definition to validate user name
-class NameValidator(Validator):
-    def validate(self, document):
-        if len(document.text) == 0:
-            raise ValidationError(
-                message="Please enter a value",
-                cursor_position=len(document.text),
-            )
-        elif len(document.text)> 8:
-            raise ValidationError(
-                message="Please enter a value that has length shorter than 8",
-                cursor_position=len(document.text),
-            )
+
 
 
 # Define function to initiate the user authentication module (Sign up, sign in etc)
@@ -79,9 +67,10 @@ def load_authentication():
 def load_user_options():
     signed_in_user_choices = [
         'Update available amount for trading', 
+        'Trade Stocks', 
+        'View current portfolio',
         'Stock Analysis',
         'Portfolio Analysis', 
-        'Trade Stocks', 
         'Delete User', 
         'Exit the application'
     ]
@@ -98,6 +87,7 @@ def load_user_options():
 
 # function to load user options
 def execute_user_choice(user_df, portfolio_df, user_choice):
+    pd.options.mode.chained_assignment = None
     if user_choice == 'Update available amount for trading':
         user_df = update_user_fund(user_df)
     elif user_choice == 'Stock Analysis':
@@ -116,6 +106,9 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
             choices=trade_stock_choices
         ).ask()
         user_df, portfolio_df = perform_trade_stock(user_trade_choice,user_df, portfolio_df)
+    elif user_choice == 'View current portfolio':
+        print(portfolio_df)
+        print(f" Cash available to trade is {user_df['user_available_to_trade'].iloc[0]}")
     elif user_choice == 'Delete User':
         delete_user(user_df)
         exit()
@@ -126,6 +119,7 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
 
 # update user fund i.e. amount available to trade for user
 def update_user_fund(user_df):
+    pd.options.mode.chained_assignment = None
     user_funds = qs.text(
         "Please enter the amount you would like to trade"
     ).ask()
@@ -153,7 +147,7 @@ def update_user_fund(user_df):
 def request_user_credentials():
     user_name = qs.text(
         "Please enter your username",
-        validate=NameValidator
+        validate=utils.NameValidator
     ).ask()
   
     user_password = qs.text(
