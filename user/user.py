@@ -42,7 +42,7 @@ def load_authentication():
                 user_df['user_available_to_trade'] = user_available_to_trade
                 # add user details into the database
                 user_df = create_user(user_df,db_engine)
-                portfolio_df = pd.DataFrame()
+                portfolio_df = pd.DataFrame(columns=['ticker', 'number_of_shares'])
                 break
             except Exception as ex:
                 print(ex)
@@ -216,6 +216,11 @@ def delete_user(user_df):
     WHERE user_name ='{user_df['user_name'].iloc[0]}'
     """
     db_engine.execute(user_query)
-     
-    print(f'User {user_df["user_name"].iloc[0]} is successfully deleted from the database.')
+    
+    user_portfolio_query = f"""
+        DELETE FROM portfolio WHERE user_name = '{user_df['user_name'].iloc[0]}'
+    """
+    db_engine.execute(user_portfolio_query)
+    
+    print(f'User {user_df["user_name"].iloc[0]} and respective portfolio details are successfully deleted from the database.')
     return True
