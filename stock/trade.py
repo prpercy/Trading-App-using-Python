@@ -15,7 +15,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             # Ask user which stock it would like to trade
             user_stock = qs.text(
                     f'Please enter the stock you would like to {user_trade_choice}'
-            ).ask()
+            ).ask().upper()
 
             # Ask user how many shares of the given stock it would like to trade
             no_of_stock = float(qs.text(
@@ -46,7 +46,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             user_df['user_available_to_trade'].iloc[0] = user_available_to_trade - trade_amount
             #will return message of successful order of a 'buy' with the 'number of shares' and the 'stock ticker'
             print(f'You have successfully executed order to: {user_trade_choice} {no_of_stock} {user_stock}')
-            #once purchased, will query to add the stock to the users portfolio data frame
+            # once purchased, will query to add the stock to the users portfolio data frame
             if idx.size > 0:
                 number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
                 portfolio_df.at[idx, 'number_of_shares'] = number_of_shares + no_of_stock
@@ -77,7 +77,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
         
         #if the number of shares in their portfolio is equal to the number of stocks they are selling, then we will delete the stock from the portfolio
         if no_of_stock >= number_of_shares:
-            #once sell order meets requirements, will return a message of a successful sell of the "number" of the specific "stock"
+            # once sell order meets requirements, will return a message of a successful sell of the "number" of the specific "stock"
             print(f' You sold {number_of_shares} stocks of {user_stock}')
             #will now drop the specific amount of shares from the portfolio data frame 
             portfolio_df = portfolio_df.drop(idx)
