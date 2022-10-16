@@ -15,7 +15,7 @@ from stock.trade import perform_trade_stock
 
 # Define function to initiate the user authentication module (Sign up, sign in etc)
 def load_authentication():
-    print('.....inside load authentication......')
+    print('.....Inside authentication module......')
 
     db_engine = utils.get_db_engine()
     
@@ -59,7 +59,7 @@ def load_authentication():
             except Exception as ex:
                 print(ex)
         
-    print('.....End of load authentication......')
+    print('.....End of authentication module......')
     return user_df, portfolio_df
 
 
@@ -102,7 +102,7 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
         print('perform stock analysis')
         user_stock = qs.text(
             "Please enter the stock you would like to analyse"
-        ).ask()
+        ).ask().upper()
         perform_stock_analysis(user_stock, portfolio_df, user_df)
         
     elif user_choice == 'Portfolio Analysis':
@@ -117,7 +117,7 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
         ).ask()
         user_df, portfolio_df = perform_trade_stock(user_trade_choice,user_df, portfolio_df)
     elif user_choice == 'View current portfolio':
-        print(portfolio_df)
+        print(portfolio_df.to_markdown())
         print(f" Cash available to trade is {user_df['user_available_to_trade'].iloc[0]}")
     elif user_choice == 'Delete User':
         delete_user(user_df)
@@ -194,7 +194,7 @@ def sign_in_user(user_df, db_engine):
             WHERE user_name ='{user_df['user_name'].iloc[0]}'
         """
         portfolio_df = pd.read_sql_query(user_portfolio_query, db_engine)
-        print(portfolio_df)
+        print(portfolio_df.to_markdown())
         
         
     elif user_db_df['user_name'].iloc[0] == user_df['user_name'].iloc[0]:

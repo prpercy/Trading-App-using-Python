@@ -4,9 +4,10 @@
 # user_stock variable is stock tickername that user wishes to perform analysis for
 
 import pandas as pd
-from dotenv import load_dotenv
-import alpaca_trade_api as tradeapi
-from datetime import date, timedelta
+import yfinance as yf
+import numpy as np
+from MCForecastTools import MCSimulation
+from portfolio.portfolio import perform_analysis
 
 def perform_stock_analysis(user_stock, portfolio_df, user_df):
     
@@ -19,7 +20,7 @@ def perform_stock_analysis(user_stock, portfolio_df, user_df):
     tickers.extend(portfolio_df['ticker'].tolist())
     tickers.append('SPY')
     
-    
+    results_dic = perform_analysis(user_stock,tickers, user_df, portfolio_df, 'stock')
     
     return True
 
