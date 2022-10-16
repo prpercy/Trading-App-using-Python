@@ -6,6 +6,7 @@ import pandas as pd
 import yfinance as yf
 import numpy as np
 from MCForecastTools import MCSimulation
+from report.report import prepare_portfolio_report
 
 def perform_portfolio_analysis(user_df, portfolio_df):
     
@@ -13,7 +14,10 @@ def perform_portfolio_analysis(user_df, portfolio_df):
     tickers = portfolio_df['ticker'].tolist()
     tickers.append('SPY')
 
-    results_dic = perform_analysis(np.nan, tickers, user_df, portfolio_df, 'portfolio')
+    results_dict = perform_analysis(np.nan, tickers, user_df, portfolio_df, 'portfolio')
+    
+    # prepare the analysis report
+    prepare_portfolio_report(results_dict)
     
     return True
 
@@ -117,10 +121,10 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     # put all these results in dictionary in a format agreed with Esteban
     # call Report function from Esteban's file
 
-    results_dic = dict()
-    results_dic['Prices'] = prices_df
-    results_dic['Returns'] = returns_df
-    results_dic['Ratios'] = ratios_df
-    results_dic['MonteCarlo'] = portfolio_2y_sim
+    results_dict = dict()
+    results_dict['Prices'] = prices_df
+    results_dict['Returns'] = returns_df
+    results_dict['Ratios'] = ratios_df
+    results_dict['MonteCarlo'] = portfolio_2y_sim
     
-    return results_dic
+    return results_dict

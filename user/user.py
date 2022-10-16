@@ -88,6 +88,7 @@ def load_user_options():
 # function to load user options
 def execute_user_choice(user_df, portfolio_df, user_choice):
     pd.options.mode.chained_assignment = None
+    
     if user_choice == 'Update available amount for trading':
         user_funds = qs.text(
             "Please enter the amount you would like to trade"
@@ -116,12 +117,15 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
             choices=trade_stock_choices
         ).ask()
         user_df, portfolio_df = perform_trade_stock(user_trade_choice,user_df, portfolio_df)
+        
     elif user_choice == 'View current portfolio':
         print(portfolio_df.to_markdown())
         print(f" Cash available to trade is {user_df['user_available_to_trade'].iloc[0]}")
+        
     elif user_choice == 'Delete User':
         delete_user(user_df)
         exit()
+        
     else:
         exit()
        

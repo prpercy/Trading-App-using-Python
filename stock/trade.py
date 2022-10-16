@@ -64,8 +64,6 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
                     VALUES
                         ('{user_stock}', {no_of_stock}, '{user_df['user_name'].iloc[0]}')
                 """
-                
-            print(portfolio_df)
             
             #if user has insufficient funds, will return a message that the user requires "more than the trade amount to complete the transaction"
         else:
@@ -111,5 +109,9 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     db_engine = utils.get_db_engine()
     db_engine.execute(portfolio_sql_query)
     db_engine.execute(user_sql_query)
+    
+    # show the portfolio at the end of trade
+    print(portfolio_df.to_markdown())
+    print(f" Cash available to trade is {user_df['user_available_to_trade'].iloc[0]}")
     
     return user_df, portfolio_df
