@@ -17,7 +17,13 @@ def perform_stock_analysis(user_stock, portfolio_df, user_df):
     # perform risk return calculations
     
     # prepare stock list for which we wish to retrieve data
-    tickers = [user_stock]
+    if user_stock in portfolio_df['ticker'].tolist():
+        print('stock is already in portfolio')
+        tickers = []
+    else:
+        tickers = [user_stock]
+        
+    
     tickers.extend(portfolio_df['ticker'].tolist())
     tickers.append('SPY')
     

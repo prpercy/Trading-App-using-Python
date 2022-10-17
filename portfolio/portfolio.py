@@ -5,6 +5,8 @@
 import pandas as pd
 import yfinance as yf
 import numpy as np
+import statsmodels.api as sm
+from statsmodels import regression
 from MCForecastTools import MCSimulation
 from report.report import prepare_portfolio_report
 
@@ -38,7 +40,6 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     # use pct_change to convert into returns
     returns_df = prices_df.pct_change().dropna()
 
-    
     # once u have returns - u can calculate beta (risk free return / std dev), std, cumulative returns (cumprod), 
     # variance/covariance(.var() and .cov(),
     # sharpe ratio, sortino ratio
@@ -85,9 +86,7 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     #add covariance and beta from calculation in cell above
     ratios_df["Covariance"] = covariance_df["Covariance"]
     ratios_df["Beta"] = beta_df["Beta"]
-    
 
-    
     # prepare for monte carlo simulation
     if indicator == 'portfolio':
         sim_input_prices_df = prices_df[portfolio_df['ticker'].tolist()]
@@ -117,10 +116,19 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
 
     # run simulation
     portfolio_2y_sim.calc_cumulative_return()
-
+    
+    # calculate alphas
+    for ticker in returns_df.columns:
+        if ticker == 'SPY':
+            ratios_df.at[ticker, 'alpha'] = 0
+        else:
+            input_returns_df = returns_df[[ticker, 'SPY']].dropna()
+            alpha = linear_regression(input_returns_df['SPY'],input_returns_df[ticker])
+            ratios_df.at[ticker, 'alpha'] = alpha
+   
     # put all these results in dictionary in a format agreed with Esteban
     # call Report function from Esteban's file
-
+    print(ratios_df.to_markdown())
     results_dict = dict()
     results_dict['Prices'] = prices_df
     results_dict['Returns'] = returns_df
@@ -128,3 +136,15 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     results_dict['MonteCarlo'] = portfolio_2y_sim
     
     return results_dict
+
+
+def linear_regression(x,y):
+
+    x = sm.add_constant(x)
+
+    model = regression.linear_model.OLS(y,x).fit()
+    
+    # remove the constant
+    x = x.iloc[:,1]
+    
+    return model.params[0]
