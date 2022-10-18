@@ -52,11 +52,11 @@ def prepare_portfolio_report(results_dict):
     
     #create widgets
 
-    tickers_wd = pn.widgets.Select(options= [tickers[:]], name='Ticker')
+    tickers_wd = pn.widgets.Select(options= tickers[:], name='Ticker')
     df_widget = pn.widgets.DataFrame(ratios_df, name='Key Ratios')
     ratio_wd = pn.widgets.Select(options= list(ratios_df.columns), name='Ratio')
 
-    """
+    
     #Define functions an interactive sidebar 
     def company_name(tickers_wd):
         name = pn.pane.Markdown("# " + yf.Ticker(tickers_wd).info['longName'])
@@ -75,15 +75,15 @@ def prepare_portfolio_report(results_dict):
     company_name_sidebar = pn.bind(company_name,tickers_wd)
     company_desc_sidebar = pn.bind(company_desc,tickers_wd)
     company_website_sidebar = pn.bind(company_website,tickers_wd)
-    """
+    
     #prepare plots
     
-    prices_plot = prices_df.drop(columns = "SPY").hvplot.line(
+    prices_plot = prices_df.drop(columns = "SPY").interactive().hvplot(
         title = "Historical Prices - 5 years",
         ylabel = "Stock Price"
     )
     
-    cum_returns_plot = cumulative_returns_df.hvplot(
+    cum_returns_plot = cumulative_returns_df.interactive().hvplot(
         title = "Historical Cummulative Returns - 5 years",
         ylabel = "Return %"
     )
@@ -94,7 +94,8 @@ def prepare_portfolio_report(results_dict):
         df = pd.DataFrame(ratios_df[ratio_wd])
         return df
     
-    ratios_bar = hvplot.bind(filter_by_val, ratio_wd).interactive(width=600).hvplot.bar(
+    ratios_bar = hvplot.bind(filter_by_val, ratio_wd).interactive(width=600).hvplot(
+        kind="bar",
         title = "Key Ratios",
         xlabel = "Ticker"
     )
@@ -107,12 +108,12 @@ def prepare_portfolio_report(results_dict):
 
     template = pn.template.FastListTemplate(
         title = "Portfolio Analysis",
-        #sidebar = [
-        #    tickers_wd,
-        #    company_name_sidebar,
-        #    company_website_sidebar,
-        #    company_desc_sidebar
-        #],
+        sidebar = [
+            tickers_wd,
+            company_name_sidebar,
+            company_website_sidebar,
+            company_desc_sidebar
+        ],
         main=[
             pn.Row(pn.Column(prices_plot, margin=(0,25)), cum_returns_plot), 
             pn.Row(pn.Column(df_widget, margin=(0,25)), ratios_bar),
@@ -122,8 +123,7 @@ def prepare_portfolio_report(results_dict):
     )
 
     #Show template
-    template.servable();      
     template.show()
-
+    exit()
     return True
         
