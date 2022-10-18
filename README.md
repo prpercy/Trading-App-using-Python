@@ -1,7 +1,48 @@
 # XPLytics
 Fintech bootcamp project 1
 
-In this app, the user would be able to trade stocks, perform portfolio analysis and generate relevant reports.
+
+---
+> User would be able to trade stocks, perform stock / portfolio analysis and generate relevant reports.
+---
+
+## Technologies
+
+> Program uses Python 3.10.6 version and Jupyter Lab
+
+Program uses 'Pandas' library to work with dataframes and analyse timeseries data. 
+xxx
+
+---
+
+## Installation Guide 
+
+Install yfinance
+Install sqlalchemy
+Install panel
+
+
+---
+## Usage
+
+> xxx
+> xxx
+
+---
+## Contributors
+
+Contributors are:
+1. [Pravin Patil](https://www.linkedin.com/in/pravin-patil-5880301)
+2. [Esteban Lopez]
+3. [Jorge Villacreses]
+4. [Liset Lopez]
+5. [William Wolfenbarger]
+
+---
+
+## License
+
+Open
 
 To use analysis.py, FinTA and yfinance packages must be installed first. Both can be installed using pip install or pip conda in terminal. 
 
