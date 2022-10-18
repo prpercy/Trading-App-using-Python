@@ -78,12 +78,12 @@ def prepare_portfolio_report(results_dict):
     """
     #prepare plots
     
-    prices_plot = prices_df.drop(columns = "SPY").interactive().hvplot.line(
+    prices_plot = prices_df.drop(columns = "SPY").hvplot.line(
         title = "Historical Prices - 5 years",
         ylabel = "Stock Price"
     )
     
-    cum_returns_plot = cumulative_returns_df.interactive().hvplot(
+    cum_returns_plot = cumulative_returns_df.hvplot(
         title = "Historical Cummulative Returns - 5 years",
         ylabel = "Return %"
     )
