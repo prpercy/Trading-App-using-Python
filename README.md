@@ -1,4 +1,4 @@
-# project1
+# XPLytics
 Fintech bootcamp project 1
 
 To use analysis.py, FinTA and yfinance packages must be installed first. Both can be installed using pip install or pip conda in terminal. 
