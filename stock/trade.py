@@ -22,7 +22,7 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
                     f'Please enter the number of shares you would like to {user_trade_choice}'
             ).ask())
     
-            # Get stock's current price using alpaca sdk; right now just adding dummy price of 100
+            # Get stock's current price using alpaca sdk
             current_stock_price = yf.Ticker(user_stock).history(period='1d')['Close'][0]
             break
         except Exception as ex:
