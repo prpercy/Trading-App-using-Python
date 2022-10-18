@@ -1,6 +1,8 @@
 # XPLytics
 Fintech bootcamp project 1
 
+In this app, the user would be able to trade stocks, perform portfolio analysis and generate relevant reports.
+
 To use analysis.py, FinTA and yfinance packages must be installed first. Both can be installed using pip install or pip conda in terminal. 
 
 Simple moving average vs closing price chart for Google stocks since 2019 using the FinTA and matlab plot packages.
