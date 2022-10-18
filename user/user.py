@@ -38,7 +38,7 @@ def load_authentication():
         while True:
             try:
                 user_df = request_user_credentials()
-                user_available_to_trade = qs.text("Please enter amount you rish to trade with").ask()
+                user_available_to_trade = qs.text("Please enter amount you wish to trade with").ask()
                 user_df['user_available_to_trade'] = user_available_to_trade
                 # add user details into the database
                 user_df = create_user(user_df,db_engine)
@@ -102,7 +102,7 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
     elif user_choice == 'Stock Analysis':
         print('perform stock analysis')
         user_stock = qs.text(
-            "Please enter the stock you would like to analyse"
+            "Please enter the stock you would like to analyze"
         ).ask().upper()
         perform_stock_analysis(user_stock, portfolio_df, user_df)
         

@@ -18,7 +18,7 @@ def perform_stock_analysis(user_stock, portfolio_df, user_df):
     
     # prepare stock list for which we wish to retrieve data
     if user_stock in portfolio_df['ticker'].tolist():
-        print('stock is already in portfolio')
+        print('This stock is already in your portfolio!')
         tickers = []
     else:
         tickers = [user_stock]
