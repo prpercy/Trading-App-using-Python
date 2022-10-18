@@ -50,13 +50,18 @@ def load_authentication():
     else:
         # for existing user please initiate the sign in process
         print('Please sign in')
+        idx = 0
         while True:
             try:
+                if idx == 3:
+                    print('Too many trials. Hence exiting.')
+                    exit()
                 user_df = request_user_credentials()
                 # check if user is in db..if not raise incorrect username or password error
                 user_df, portfolio_df = sign_in_user(user_df,db_engine)
                 break
             except Exception as ex:
+                idx = idx + 1
                 print(ex)
         
     print('.....End of authentication module......')
@@ -204,10 +209,11 @@ def sign_in_user(user_df, db_engine):
     elif user_db_df['user_name'].iloc[0] == user_df['user_name'].iloc[0]:
         print('Login unsuccessful')
         print('Incorrect user password. Please enter correct password.')
-        raise Exception('xyz', 'abc')
+        raise Exception('Incorrect user password')
     else:
         print('Login unsuccessful')
         print('Incorrect user name. Please enter correct user name or sign up.')
+        raise Exception('Incorrect user name')
     return user_db_df, portfolio_df
 
 
