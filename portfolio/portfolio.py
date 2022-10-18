@@ -130,6 +130,7 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     # call Report function from Esteban's file
     print(ratios_df.to_markdown())
     results_dict = dict()
+    results_dict['tickers'] = tickers
     results_dict['Prices'] = prices_df
     results_dict['Returns'] = returns_df
     results_dict['Ratios'] = ratios_df
