@@ -131,10 +131,12 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     print(ratios_df.to_markdown())
     results_dict = dict()
     results_dict['tickers'] = tickers
+    results_dict['tickers'] = tickers
     results_dict['Prices'] = prices_df
     results_dict['Returns'] = returns_df
     results_dict['Ratios'] = ratios_df
     results_dict['MonteCarlo'] = portfolio_2y_sim
+    results_dict['user_stock'] = user_stock
     
     return results_dict
 
