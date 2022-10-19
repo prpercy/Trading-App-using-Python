@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import datetime as dt
 import pytz
+import hvplot.pandas
 
 class MCSimulation:
     """
@@ -135,7 +136,7 @@ class MCSimulation:
             
         # Use Pandas plot function to plot the return data
         plot_title = f"{self.nSim} Simulations of Cumulative Portfolio Return Trajectories Over the Next {self.nTrading} Trading Days."
-        return self.simulated_return.plot(legend=None,title=plot_title)
+        return self.simulated_return.hvplot(legend=None,title=plot_title)
     
     def plot_distribution(self):
         """
@@ -150,9 +151,9 @@ class MCSimulation:
         # Use the `plot` function to create a probability distribution histogram of simulated ending prices
         # with markings for a 95% confidence interval
         plot_title = f"Distribution of Final Cumuluative Returns Across All {self.nSim} Simulations"
-        plt = self.simulated_return.iloc[-1, :].plot(kind='hist', bins=10,density=True,title=plot_title)
-        plt.axvline(self.confidence_interval.iloc[0], color='r')
-        plt.axvline(self.confidence_interval.iloc[1], color='r')
+        plt = self.simulated_return.iloc[-1, :].hvplot(kind='hist', bins=10,title=plot_title)
+        #plt.axvline(self.confidence_interval.iloc[0], color='r')
+        #plt.axvline(self.confidence_interval.iloc[1], color='r')
         return plt
     
     def summarize_cumulative_return(self):
