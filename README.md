@@ -11,6 +11,12 @@ Fintech bootcamp project 1
 > Program uses Python 3.10.6 version and Jupyter Lab
 
 Program uses 'Pandas' library to work with dataframes and analyse timeseries data. 
+Program uses 'YFinance' API to download market data.
+Program uses 'Numpy' library in integration with 'Pandas' to manipulate financial data.
+Program uses 'MCForecastTools' file for Monte Carlo Simulations.
+Program uses 'Panel' library for creating an interactive web dashboard.
+Program uses 'Fire' and 'Questionary' library for Command Line Interface. 
+Program uses 'SQLAlchemy' toolkit for application development.
 xxx
 
 ---
