@@ -16,7 +16,7 @@ def perform_portfolio_analysis(user_df, portfolio_df):
     tickers = portfolio_df['ticker'].tolist()
     tickers.append('SPY')
 
-    results_dict = perform_analysis(np.nan, tickers, user_df, portfolio_df, 'portfolio')
+    results_dict = perform_analysis('', tickers, user_df, portfolio_df, 'portfolio')
     
     # prepare the analysis report
     prepare_portfolio_report(results_dict)
