@@ -117,13 +117,15 @@ def prepare_portfolio_report(results_dict):
         main=[
             pn.Row(pn.Column(prices_plot, margin=(0,25)), cum_returns_plot), 
             pn.Row(pn.Column(df_widget, margin=(0,25)), ratios_bar),
+            pn.Row(pn.Column('xyz', margin=(0,25)), 'abc'),
             pn.Row(pn.Column(MC_line_plot, margin=(0,25)),MC_hist)
         ],
-        theme="dark"
+        theme="dark",
+        threaded = True
     )
 
     #Show template
-    template.show()
-    exit()
+    x = template.show()
+    
     return True
         
