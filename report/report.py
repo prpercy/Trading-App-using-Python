@@ -29,6 +29,7 @@ pn.extension()
 import hvplot.pandas
 import seaborn as sns
 from bokeh.models import Button
+import sys
 
     
 # function to prepare visualzation of stock analysis report
@@ -116,8 +117,10 @@ def prepare_portfolio_report(results_dict):
     
     desc_pane = pn.pane.Str(desc)
     
+    # define call back function for the bokeh button
     def callback():
-        exit()
+          sys.exit()
+
     # add a button widget and configure with the call back
     button = Button(label="Press Me to Exit App")
     button.on_click(callback)
@@ -141,9 +144,8 @@ def prepare_portfolio_report(results_dict):
     )
     
     
-     
     #Show template
-    template.show(open=True)
+    x = template.show(open=True)
     
     return True
 
