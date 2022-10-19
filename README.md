@@ -17,23 +17,22 @@ Program uses 'MCForecastTools' file for Monte Carlo Simulations.
 Program uses 'Panel' library for creating an interactive web dashboard.
 Program uses 'Fire' and 'Questionary' library for Command Line Interface. 
 Program uses 'SQLAlchemy' toolkit for application development.
+Program uses 'hvplot' and 'matlabplot' for data visualization.
 xxx
 
 ---
 
 ## Installation Guide 
 
-Install yfinance
-Install sqlalchemy
-Install panel
+All programs needed for application usage can be installed using "pip install" command in terminal. 'MCForecastTools' file must be in same folder as 'app.py' folder. File directory can and should be downloaded/cloned to ensure proper file retrieval.
 
 
 ---
 ## Usage
 
-> xxx
-> xxx
-
+> In terminal, open conda environment. Run python app.py
+> Once inside authentication module, use arrow keys and enter key to choose if 'new' or 'returning' user. If 'new' user, then set up username and password.<img width="445" alt="Screen Shot 2022-10-18 at 7 13 08 PM" src="https://user-images.githubusercontent.com/111557486/196811664-e815f578-fd71-4449-bf66-8d3661fc6d67.png">
+> 
 ---
 ## Contributors
 
