@@ -28,15 +28,16 @@ import panel as pn
 pn.extension()
 import hvplot.pandas
 import seaborn as sns
+from bokeh.models import Button
 
-
+    
 # function to prepare visualzation of stock analysis report
 
 def prepare_stock_report(results_dict):
     
     prepare_portfolio_report(results_dict)
-
-    return True
+    print('is it atleast coming here ***********')
+    return
 
 # function to prepare visualzation of portfolio analysis report
 
@@ -48,6 +49,7 @@ def prepare_portfolio_report(results_dict):
     prices_df = results_dict.get('Prices')
     returns_df = results_dict.get('Returns')
     portfolio_2y_sim = results_dict.get('MonteCarlo')
+    user_stock = results_dict.get('user_stock')
     cumulative_returns_df = (1 + returns_df).cumprod()
     
     #create widgets
@@ -104,11 +106,26 @@ def prepare_portfolio_report(results_dict):
     MC_line_plot = portfolio_2y_sim.plot_simulation()
     MC_hist = portfolio_2y_sim.plot_distribution()
     
+    template_title = 'Portfolio Analysis'
+    desc = 'Following Monte-Carlo simulation is performed for the user portfolio with weights calculated according to number of shares s/he holds : '
+   
+    if len(user_stock) > 0:
+        template_title = f'{user_stock} Stock Analysis'
+        desc = f'Following Monte-Carlo simulation is performed for the hypothetical portfolio with 10% weight for the stock {user_stock} and remaining 90% weight for the existing portfolio of the user : '
     # Create dashboard using FastListTemplate from Panel Library
+    
+    desc_pane = pn.pane.Str(desc)
+    
+    def callback():
+        exit()
+    # add a button widget and configure with the call back
+    button = Button(label="Press Me to Exit App")
+    button.on_click(callback)
 
     template = pn.template.FastListTemplate(
-        title = "Portfolio Analysis",
+        title = template_title,
         sidebar = [
+            button,
             tickers_wd,
             company_name_sidebar,
             company_website_sidebar,
@@ -117,15 +134,19 @@ def prepare_portfolio_report(results_dict):
         main=[
             pn.Row(pn.Column(prices_plot, margin=(0,25)), cum_returns_plot), 
             pn.Row(pn.Column(df_widget, margin=(0,25)), ratios_bar),
-            pn.Row(pn.Column('xyz', margin=(0,25)), 'abc'),
+            pn.Row(desc_pane, sizing_mode='stretch_width'),
             pn.Row(pn.Column(MC_line_plot, margin=(0,25)),MC_hist)
         ],
-        theme="dark",
-        threaded = True
+        theme="dark"
     )
-
+    
+    
+     
     #Show template
-    x = template.show()
+    template.show(open=True)
     
     return True
+
+
+    
         
