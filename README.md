@@ -69,10 +69,10 @@ talk about correlation and volatility and sharpe ratios
 
 Contributors are:
 1. [Pravin Patil](https://www.linkedin.com/in/pravin-patil-5880301)
-2. [Esteban Lopez]
-3. [Jorge Villacreses]
+2. [Esteban Lopez](https://www.linkedin.com/in/estebandlopez/)
+3. [Jorge Villacreses](https://www.linkedin.com/in/jorge-villacreses-a2114517/)
 4. [Liset Lopez]
-5. [William Wolfenbarger]
+5. [William Wolfenbarger](https://www.linkedin.com/in/william-wolfenbarger-951379160/)
 
 ---
 
