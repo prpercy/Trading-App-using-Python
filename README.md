@@ -57,11 +57,11 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 >
 ><img width="460" alt="SELL" src="https://user-images.githubusercontent.com/111557486/196828663-55599347-d83b-459d-881c-fad02437fa01.png">
 
->The next available option is to perform Stock Analysis. Terminal will prompt to include Ticker for stock to analyze.
+>The next available option is to perform Stock Analysis. The terminal will prompt to include a Ticker for stock to analyze. 
 >
 ><img width="422" alt="STOCKANA" src="https://user-images.githubusercontent.com/111557486/196829580-89236507-f27c-4896-af68-2a330d9056f4.png">
+>The panel dashboard will open promptly. In the dashboard, a chart with the correlation, volatility, Sharpe ratio, Sortino ratio, Covariance, Beta, and Alpha values can be viewed. The historical data for the past 5 years of stocks, portfolio, and markets were turned into a dataframe. By combining the closing price of each data frame, a 'returns' dataframe is created. Using the standard deviation, the annualized standard deviation can be calculated. From there, the rolling standard deviation for the past 30 days is calculated. Covariance and Variance was calculated from returns. Beta was calculated by dividing covariance/variance. Annualized average returns was calculated by taking the average of returns and multiplying by number of trading days.
 
-talk about correlation and volatility and sharpe ratios
 
 
 ---
