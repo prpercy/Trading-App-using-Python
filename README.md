@@ -29,14 +29,14 @@ xxx
 ## Installation Guide 
 
 Program requires following packages:
-1. Hvplot (0.8.0 or above version)
-2. sqlalchemy
-3. yfinance
-4. Panel
+* Hvplot (0.8.0 or above version)
+* sqlalchemy
+* yfinance
+* Panel
 
-All programs needed for application usage can be installed using "pip or conda install" command in terminal. 
-'MCForecastTools' file must be in same folder as 'app.py' folder. 
-File directory can and should be downloaded/cloned to ensure proper file retrieval.
+All programs needed for application usage can be installed using "pip or conda install" command in terminal. <br />
+'MCForecastTools' file must be in same folder as 'app.py' folder. <br />
+File directory can and should be downloaded/cloned to ensure proper file retrieval.<br />
 
 
 ---
@@ -80,7 +80,3 @@ Contributors are:
 
 Open
 
-To use analysis.py, FinTA and yfinance packages must be installed first. Both can be installed using pip install or pip conda in terminal. 
-
-Simple moving average vs closing price chart for Google stocks since 2019 using the FinTA and matlab plot packages.
-![SMA](https://user-images.githubusercontent.com/111557486/195212820-2b0a8001-b52b-4df1-8b9b-7fdfe045f249.png)
