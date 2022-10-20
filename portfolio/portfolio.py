@@ -1,7 +1,3 @@
-## Function to perform portfolio analysis (historical, present plus future analysis)
-## Portfolio_df contains:stock names, outstanding holding of each stock (e.g. 10 stocks of GOOG, 13 stocks of FB etc)
-## User_df contains : user name, user password, available fund to trade
-
 import pandas as pd
 import yfinance as yf
 import numpy as np
@@ -10,20 +6,26 @@ from statsmodels import regression
 from MCForecastTools import MCSimulation
 from report.report import prepare_portfolio_report
 
+# Function to perform portfolio analysis (historical, present plus future analysis)
+# Portfolio_df contains:stock names, outstanding holding of each stock (e.g. 10 stocks of GOOG, 13 stocks of FB etc)
+# User_df contains : user name, user password, available fund to trade
 def perform_portfolio_analysis(user_df, portfolio_df):
     
-    ## Get the list of all tickers in user portfolio and add SPY
+    # Get the list of all tickers in user portfolio and add SPY
     tickers = portfolio_df['ticker'].tolist()
+    # add S&P 500 ticker to the list for analysis purpose
     tickers.append('SPY')
 
+    # call perform analysis function that provides all the results in a dictionary
     results_dict = perform_analysis('', 0, tickers, user_df, portfolio_df, 'portfolio')
     
-    ## Prepare the analysis report
+    # Prepare the portfolio analysis report
     prepare_portfolio_report(results_dict)
     
     return True
 
 
+# key function that performs all the risk/ratio metrics calculations and also performs the monte carlo simulation
 def perform_analysis(user_stock, user_stock_weight, tickers, user_df, portfolio_df, indicator):
     
     portfolio_dic = dict()
@@ -34,18 +36,15 @@ def perform_analysis(user_stock, user_stock_weight, tickers, user_df, portfolio_
     portfolio = yf.Tickers(tickers)
     portfolio_history_df = portfolio.history(period = "5y")
     prices_df = portfolio_history_df["Close"]
+    
+    # calculate portfolio NAV
     portfolio_prices_df = prices_df[portfolio_df['ticker'].tolist()].mul(portfolio_dic)
     prices_df['PORTFOLIO'] = portfolio_prices_df.sum(axis=1)
     
-    ## Use pct_change to convert into returns
+    # Use pct_change to convert into returns
     returns_df = prices_df.pct_change().dropna()
 
-    ## Once you have returns - you can calculate beta (risk free return / std dev), std, cumulative returns (cumprod) 
-    ## Variance/covariance(.var() and .cov()
-    ## Sharpe ratio, sortino ratio
-    ## Monte carlo output
-    
-    ## Standard devs and annualized STDev
+    # Standard devs and annualized STDev
     std_devs = returns_df.std()
     number_of_trading_days = 252
     annualized_std_devs = std_devs*np.sqrt(number_of_trading_days)
@@ -107,7 +106,6 @@ def perform_analysis(user_stock, user_stock_weight, tickers, user_df, portfolio_
         weights = [user_stock_weight,1-user_stock_weight]
 
     ## Configure the Monte Carlo simulation to forecast 2 years cumulative returns
-    ## Print(sim_input_prices_df.head())
     portfolio_2y_sim = MCSimulation(
         sim_input_prices_df,
         weights,
@@ -127,9 +125,7 @@ def perform_analysis(user_stock, user_stock_weight, tickers, user_df, portfolio_
             alpha = linear_regression(input_returns_df['SPY'],input_returns_df[ticker])
             ratios_df.at[ticker, 'alpha'] = alpha
    
-    ## Put all these results in dictionary in a format agreed with Esteban
-    ## Call Report function from Esteban's file
-    print(ratios_df.to_markdown())
+    ## Put all these results in a dictionary
     results_dict = dict()
     results_dict['tickers'] = tickers
     results_dict['tickers'] = tickers
@@ -142,7 +138,7 @@ def perform_analysis(user_stock, user_stock_weight, tickers, user_df, portfolio_
     
     return results_dict
 
-
+# function to perform linear regression and return alpha for the stock
 def linear_regression(x,y):
 
     x = sm.add_constant(x)

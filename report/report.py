@@ -13,13 +13,6 @@
     # lists required: 'tickers' including all ticker names 
 
 #bring in dfs from portfolio.py
-"""
-results_dict.get('Ratios')
-results_dict.get('Prices')
-results_dict.get('Cumulative Returns')
-results_dict.get('MonteCarlo')
-results_dict.get('Tickers')
-"""
 
 import pandas as pd
 import yfinance as yf
@@ -33,18 +26,15 @@ import sys
 
     
 # function to prepare visualzation of stock analysis report
-
 def prepare_stock_report(results_dict):
     
     prepare_portfolio_report(results_dict)
-    print('is it atleast coming here ***********')
     return
 
 # function to prepare visualzation of portfolio analysis report
-
 def prepare_portfolio_report(results_dict):
     
-    # get data out of results dictionary
+    # get data out of results dictionary for further visualisation
     tickers = results_dict.get('tickers')
     ratios_df = results_dict.get('Ratios')
     prices_df = results_dict.get('Prices')
@@ -107,13 +97,30 @@ def prepare_portfolio_report(results_dict):
     #prepare montecarlo plots
     MC_line_plot = portfolio_2y_sim.plot_simulation()
     MC_hist = portfolio_2y_sim.plot_distribution()
+    tbl_2y_summary_stats = portfolio_2y_sim.summarize_cumulative_return()
+    tbl_2y_summary_stats.rename("Stat Values", inplace=True)
     
+    # Compute summary statistics from the simulated daily returns
+    dic_2y_simulated_returns = {'mean' : list(portfolio_2y_sim.simulated_return.mean(axis=1)),
+                            'median': list(portfolio_2y_sim.simulated_return.median(axis=1)),
+                            'min' : list(portfolio_2y_sim.simulated_return.min(axis=1)),
+                            'max' : list(portfolio_2y_sim.simulated_return.max(axis=1))
+            }
+
+    #Create a DataFrame with the summary statistics
+    df_2y_simulated_returns = pd.DataFrame(dic_2y_simulated_returns)
+
+    # Use the 'plot' function to create a chart of the simulated cumulative returns
+    sim_plot = df_2y_simulated_returns.hvplot(title='2 year simulated cumulative returns')
+
+    
+    # prepare template tile and description depending on whether its a stock analysis or portfolio analysis
     template_title = 'Portfolio Analysis'
     desc = 'Following Monte-Carlo simulation is performed for the user portfolio with weights calculated according to number of shares s/he holds : '
    
     if len(user_stock) > 0:
         template_title = f'{user_stock} Stock Analysis'
-        desc = f'Following Monte-Carlo simulation is performed for the hypothetical portfolio with {user_stock_weight} weight for the stock {user_stock} and remaining {1-user_stock_weight} weight for the existing portfolio of the user : '
+        desc = f'Following Monte-Carlo simulation is performed for the hypothetical portfolio with {user_stock_weight*100}% weight for the stock {user_stock} and remaining {(1-user_stock_weight)*100}% weight for the existing portfolio of the user : '
     # Create dashboard using FastListTemplate from Panel Library
     
     desc_pane = pn.pane.Str(desc)
@@ -126,6 +133,7 @@ def prepare_portfolio_report(results_dict):
     button = Button(label="Press Me to Exit App")
     button.on_click(callback)
 
+    # prepare template for the visualization report
     template = pn.template.FastListTemplate(
         title = template_title,
         sidebar = [
@@ -139,14 +147,15 @@ def prepare_portfolio_report(results_dict):
             pn.Row(pn.Column(prices_plot, margin=(0,25)), cum_returns_plot), 
             pn.Row(pn.Column(df_widget, margin=(0,25)), ratios_bar),
             pn.Row(desc_pane, sizing_mode='stretch_width'),
-            pn.Row(pn.Column(MC_line_plot, margin=(0,25)),MC_hist)
+            pn.Row(pn.Column(MC_line_plot, margin=(0,25)),MC_hist),
+            pn.Row(pn.Column(sim_plot, margin=(0,25)),tbl_2y_summary_stats)
         ],
         theme="dark"
     )
     
     
     #Show template
-    x = template.show(open=True)
+    template.show(open=True)
     
     return True
 

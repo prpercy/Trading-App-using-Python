@@ -1,6 +1,6 @@
 # Add user use cases related program logic in this file
 
-# import Pandas, SQL, Questionary libraries to work with this file
+# import libraries to work with this file
 import sqlalchemy as sql
 import pandas as pd
 import questionary as qs
@@ -8,8 +8,6 @@ import utils
 from portfolio.portfolio import perform_portfolio_analysis
 from stock.stock import perform_stock_analysis
 from stock.trade import perform_trade_stock
-
-#user5
 
 
 
@@ -90,7 +88,14 @@ def load_user_options():
 
 
 
-# function to load user options
+# function to execute user Choice which could be any of 
+            # 'Update available amount for trading', 
+            # 'Trade Stocks', 
+            # 'View current portfolio',
+            # 'Stock Analysis',
+            # 'Portfolio Analysis', 
+            # 'Delete User', 
+            # 'Exit the application'
 def execute_user_choice(user_df, portfolio_df, user_choice):
     pd.options.mode.chained_assignment = None
     
@@ -139,7 +144,7 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
        
     return user_df, portfolio_df
 
-# update user fund
+# update user funds available for trading to user
 def update_user_fund(user_df):
     
     # update user details into the database in user table
@@ -191,6 +196,7 @@ def sign_in_user(user_df, db_engine):
         user 
     WHERE user_name ='{user_df['user_name'].iloc[0]}'
     """
+    # retrieve user details from sql table 'user'
     user_db_df = pd.read_sql_query(user_query, db_engine)
      
     if user_db_df['user_password'].iloc[0] == user_df['user_password'].iloc[0]:
@@ -206,9 +212,6 @@ def sign_in_user(user_df, db_engine):
             WHERE user_name ='{user_df['user_name'].iloc[0]}'
         """
         portfolio_df = pd.read_sql_query(user_portfolio_query, db_engine)
-        print(portfolio_df.to_markdown())
-        
-        
     elif user_db_df['user_name'].iloc[0] == user_df['user_name'].iloc[0]:
         print('Login unsuccessful')
         print('Incorrect user password. Please enter correct password.')
