@@ -37,6 +37,7 @@ All programs needed for application usage can be installed using "pip install" c
 
 > The first option available is Update Available Amount for Trading. This option allows you to update the funds in your account to use for buying stocks.<img width="491" alt="UAAFT" src="https://user-images.githubusercontent.com/111557486/196827370-02c03442-126e-4aad-9e93-ae6a790b5454.png">
 
+
 ---
 ## Contributors
 
