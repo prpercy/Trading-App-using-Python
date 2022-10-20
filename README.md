@@ -51,7 +51,9 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 
 >The next available option is to trade stocks. A buy/sell option will appear. For buying stocks, the terminal will prompt you to include the TICKER for the stock to be purchased. Followed by the amount of stocks to be purchased. Then, the portfolio will be updated. <img width="1085" alt="BUY2" src="https://user-images.githubusercontent.com/111557486/196828340-3c8af3a4-aed2-412b-b622-e58f3dcbc785.png">
 
->To sell a stock, terminal will prompt you to include the Ticker for the stock from your portfolio to be sold. Followed by the amount of stocks to sell. Then, the portfolio will be updated. <img width="460" alt="SELL" src="https://user-images.githubusercontent.com/111557486/196828663-55599347-d83b-459d-881c-fad02437fa01.png">
+>To sell a stock, terminal will prompt you to include the Ticker for the stock from your portfolio to be sold. Followed by the amount of stocks to sell. Then, the portfolio will be updated. 
+>
+><img width="460" alt="SELL" src="https://user-images.githubusercontent.com/111557486/196828663-55599347-d83b-459d-881c-fad02437fa01.png">
 
 
 
