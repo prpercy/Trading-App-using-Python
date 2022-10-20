@@ -61,7 +61,7 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 >
 ><img width="422" alt="STOCKANA" src="https://user-images.githubusercontent.com/111557486/196829580-89236507-f27c-4896-af68-2a330d9056f4.png">
 
-
+talk about correlation and volatility and sharpe ratios
 
 
 ---
