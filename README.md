@@ -57,6 +57,8 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 >
 ><img width="460" alt="SELL" src="https://user-images.githubusercontent.com/111557486/196828663-55599347-d83b-459d-881c-fad02437fa01.png">
 
+>The next available option is to perform Stock Analysis. <img width="422" alt="STOCKANA" src="https://user-images.githubusercontent.com/111557486/196829580-89236507-f27c-4896-af68-2a330d9056f4.png">
+
 
 
 
