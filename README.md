@@ -35,7 +35,7 @@ All programs needed for application usage can be installed using "pip install" c
 
 > After creating a username and password, or logging in, terminal will ask what you would like to do. <img width="428" alt="WWYLTD" src="https://user-images.githubusercontent.com/111557486/196820228-d0b44088-9356-41c9-8520-71b73103a3b1.png">
 
-> The first option available is Update Available Amount for Trading. This option allows you to update the funds in your account to use for buying stocks.<img width="491" alt="UAAFT" src="https://user-images.githubusercontent.com/111557486/196827370-02c03442-126e-4aad-9e93-ae6a790b5454.png">
+> The first option available is Update Available Amount for Trading. This option allows you to update the funds in your account to use for buying stocks<img width="491" alt="UAAFT" src="https://user-images.githubusercontent.com/111557486/196827370-02c03442-126e-4aad-9e93-ae6a790b5454.png">
 
 
 ---
