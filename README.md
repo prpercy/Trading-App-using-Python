@@ -61,13 +61,20 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 >
 ><img width="422" alt="STOCKANA" src="https://user-images.githubusercontent.com/111557486/196829580-89236507-f27c-4896-af68-2a330d9056f4.png">
 >
->The panel dashboard will open promptly. In the dashboard, a chart with the correlation, volatility, Sharpe ratio, Sortino ratio, Covariance, Beta, and Alpha values can be viewed. The historical data for the past 5 years of stocks, portfolio, and markets were turned into a dataframe. By combining the closing price of each data frame, a 'returns' dataframe is created. Using the standard deviation, the annualized standard deviation can be calculated. From there, the rolling standard deviation for the past 30 days was calculated, which refers to the volatility. Once covariance and variance were calculated from returns, beta was calculated by dividing covariance/variance. Annualized average returns were calculated by taking the average of returns and multiplying by number of trading days. The sharpe and sortino ratios were calculated using the standard deviation and average of returns. Both sharpe and sortino ratios are both risk-adjusted evaluations, however the sortino ratio only factors in downside risk. By having both the sharpe and sortino ratio, we can evaluate both low and high volatility.
+>The panel dashboard will open promptly. In the dashboard, a chart with the correlation, volatility, Sharpe ratio, Sortino ratio, Covariance, Beta, and Alpha values can be viewed. The historical data for the past 5 years of stocks, portfolio, and markets were turned into a dataframe. By combining the closing price of each data frame, a 'returns' dataframe is created. Using the standard deviation, the annualized standard deviation can be calculated. From there, the rolling standard deviation for the past 30 days was calculated, which refers to the volatility. Once covariance and variance were calculated from returns, beta was calculated by dividing covariance/variance. Annualized average returns were calculated by taking the average of returns and multiplying by number of trading days. The sharpe and sortino ratios were calculated using the standard deviation and average of returns. Both sharpe and sortino ratios are both risk-adjusted evaluations, however the sortino ratio only factors in downside risk. By having both the sharpe and sortino ratio, we can evaluate both low and high volatility. Alpha was calculated by using 'statsmodel' for linear regression.
 
 ><img width="946" alt="Screen Shot 2022-10-19 at 8 27 30 PM" src="https://user-images.githubusercontent.com/111557486/197029934-c1a99b0f-30d8-495e-9e75-c2412d5e0350.png">
 
 > The following option is to perform Portfolio Analysis. The Portfolio Analysis includes Monte-Carlo simulations performed for the user portfolio with weights calculated according to number of shares s/he holds.
 
 ><img width="955" alt="Screen Shot 2022-10-20 at 2 47 58 PM" src="https://user-images.githubusercontent.com/111557486/197033690-cac263c6-4da3-4525-bcb1-1d6c56423afb.png">
+
+>The remaining two options are "Delete User" and "Exit Application." The 'Delete' option allows you to delete your portfolio and username/password information. The 'Exit' options allows you to safely exit out of the application.
+
+><img width="178" alt="Screen Shot 2022-10-20 at 3 08 17 PM" src="https://user-images.githubusercontent.com/111557486/197037077-e83c1653-0cbd-4f39-8a22-e1dea220c80c.png">
+
+><img width="308" alt="Screen Shot 2022-10-20 at 3 08 11 PM" src="https://user-images.githubusercontent.com/111557486/197037121-545c0b72-3ee5-4ff9-b823-6e7830e68315.png">
+
 
 
 
