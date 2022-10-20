@@ -49,6 +49,9 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 > 
 > <img width="491" alt="UAAFT" src="https://user-images.githubusercontent.com/111557486/196827370-02c03442-126e-4aad-9e93-ae6a790b5454.png">
 
+The next available option is to trade stocks. A buy/sell option will appear. For buying stocks, the terminal will prompt you to include the TICKER for the stock to be purchased. Followed by the amount of stocks to be purchased. Then, the portfolio will be updated. <img width="1085" alt="BUY2" src="https://user-images.githubusercontent.com/111557486/196828340-3c8af3a4-aed2-412b-b622-e58f3dcbc785.png">
+
+
 
 ---
 ## Contributors
