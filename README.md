@@ -18,13 +18,23 @@ Program uses 'Panel' library for creating an interactive web dashboard.
 Program uses 'Fire' and 'Questionary' library for Command Line Interface. 
 Program uses 'SQLAlchemy' toolkit for application development.
 Program uses 'hvplot' and 'matlabplot' for data visualization.
+Program uses 'statsmodels' for linear regression to calculate stock alphas
+
 xxx
 
 ---
 
 ## Installation Guide 
 
-All programs needed for application usage can be installed using "pip install" command in terminal. 'MCForecastTools' file must be in same folder as 'app.py' folder. File directory can and should be downloaded/cloned to ensure proper file retrieval.
+Program requires following packages:
+1. Hvplot (0.8.0 or above version)
+2. sqlalchemy
+3. yfinance
+4. Panel
+
+All programs needed for application usage can be installed using "pip or conda install" command in terminal. 
+'MCForecastTools' file must be in same folder as 'app.py' folder. 
+File directory can and should be downloaded/cloned to ensure proper file retrieval.
 
 
 ---
