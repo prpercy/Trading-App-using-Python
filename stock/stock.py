@@ -10,7 +10,7 @@ from MCForecastTools import MCSimulation
 from portfolio.portfolio import perform_analysis
 from report.report import prepare_stock_report
 
-def perform_stock_analysis(user_stock, portfolio_df, user_df):
+def perform_stock_analysis(user_stock, user_stock_weight, portfolio_df, user_df):
     
     #get the user_stock prices n daily returns for past 3 years using alpaca
     # similarly get details of S&P 500 and stocks in the portfolio_df
@@ -27,7 +27,7 @@ def perform_stock_analysis(user_stock, portfolio_df, user_df):
     tickers.extend(portfolio_df['ticker'].tolist())
     tickers.append('SPY')
     
-    results_dict = perform_analysis(user_stock,tickers, user_df, portfolio_df, 'stock')
+    results_dict = perform_analysis(user_stock,user_stock_weight, tickers, user_df, portfolio_df, 'stock')
     
     # prepare the analysis report
     prepare_stock_report(results_dict)

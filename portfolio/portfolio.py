@@ -16,7 +16,7 @@ def perform_portfolio_analysis(user_df, portfolio_df):
     tickers = portfolio_df['ticker'].tolist()
     tickers.append('SPY')
 
-    results_dict = perform_analysis('', tickers, user_df, portfolio_df, 'portfolio')
+    results_dict = perform_analysis('', 0, tickers, user_df, portfolio_df, 'portfolio')
     
     ## Prepare the analysis report
     prepare_portfolio_report(results_dict)
@@ -24,7 +24,7 @@ def perform_portfolio_analysis(user_df, portfolio_df):
     return True
 
 
-def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
+def perform_analysis(user_stock, user_stock_weight, tickers, user_df, portfolio_df, indicator):
     
     portfolio_dic = dict()
     for ticker in portfolio_df['ticker'].tolist():
@@ -104,7 +104,7 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
         sim_input_prices_df.columns = pd.MultiIndex.from_tuples(column_names)
 
         ## Calculate portfolio weights
-        weights = [0.1,0.9]
+        weights = [user_stock_weight,1-user_stock_weight]
 
     ## Configure the Monte Carlo simulation to forecast 2 years cumulative returns
     ## Print(sim_input_prices_df.head())
@@ -138,6 +138,7 @@ def perform_analysis(user_stock, tickers, user_df, portfolio_df, indicator):
     results_dict['Ratios'] = ratios_df
     results_dict['MonteCarlo'] = portfolio_2y_sim
     results_dict['user_stock'] = user_stock
+    results_dict['user_stock_weight'] = user_stock_weight
     
     return results_dict
 

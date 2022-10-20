@@ -109,7 +109,10 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
         user_stock = qs.text(
             "Please enter the stock you would like to analyze"
         ).ask().upper()
-        perform_stock_analysis(user_stock, portfolio_df, user_df)
+        user_stock_weight = float(qs.text(
+            "Please enter the potential weight you have in mind for this stock in your portfolio"
+        ).ask())
+        perform_stock_analysis(user_stock, user_stock_weight, portfolio_df, user_df)
         
     elif user_choice == 'Portfolio Analysis':
         print('perform portfolio analysis...')

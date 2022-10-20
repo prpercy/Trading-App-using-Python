@@ -51,6 +51,7 @@ def prepare_portfolio_report(results_dict):
     returns_df = results_dict.get('Returns')
     portfolio_2y_sim = results_dict.get('MonteCarlo')
     user_stock = results_dict.get('user_stock')
+    user_stock_weight = results_dict.get('user_stock_weight')
     cumulative_returns_df = (1 + returns_df).cumprod()
     
     #create widgets
@@ -112,14 +113,14 @@ def prepare_portfolio_report(results_dict):
    
     if len(user_stock) > 0:
         template_title = f'{user_stock} Stock Analysis'
-        desc = f'Following Monte-Carlo simulation is performed for the hypothetical portfolio with 10% weight for the stock {user_stock} and remaining 90% weight for the existing portfolio of the user : '
+        desc = f'Following Monte-Carlo simulation is performed for the hypothetical portfolio with {user_stock_weight} weight for the stock {user_stock} and remaining {1-user_stock_weight} weight for the existing portfolio of the user : '
     # Create dashboard using FastListTemplate from Panel Library
     
     desc_pane = pn.pane.Str(desc)
     
     # define call back function for the bokeh button
     def callback():
-          sys.exit()
+         sys.exit()
 
     # add a button widget and configure with the call back
     button = Button(label="Press Me to Exit App")
