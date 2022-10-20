@@ -65,6 +65,12 @@ File directory can and should be downloaded/cloned to ensure proper file retriev
 
 ><img width="946" alt="Screen Shot 2022-10-19 at 8 27 30 PM" src="https://user-images.githubusercontent.com/111557486/197029934-c1a99b0f-30d8-495e-9e75-c2412d5e0350.png">
 
+> The following option is to perform Portfolio Analysis. The Portfolio Analysis includes Monte-Carlo simulations performed for the user portfolio with weights calculated according to number of shares s/he holds.
+
+><img width="955" alt="Screen Shot 2022-10-20 at 2 47 58 PM" src="https://user-images.githubusercontent.com/111557486/197033690-cac263c6-4da3-4525-bcb1-1d6c56423afb.png">
+
+
+
 
 
 
