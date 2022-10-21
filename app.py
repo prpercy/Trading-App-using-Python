@@ -7,6 +7,9 @@ from user.user import load_authentication, load_user_options, execute_user_choic
 def run():
     """The main function for running the script."""
     
+    print("---------------------")
+    print("Welcome to 'XPlytics'!!!")
+    print("---------------------")
     # Run user authentication program
     user_df, portfolio_df = load_authentication()
     

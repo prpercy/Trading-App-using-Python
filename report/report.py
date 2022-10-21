@@ -115,11 +115,11 @@ def prepare_portfolio_report(results_dict):
 
     
     # prepare template tile and description depending on whether its a stock analysis or portfolio analysis
-    template_title = 'Portfolio Analysis'
+    template_title = 'XPlytics: Portfolio Analysis'
     desc = 'Following Monte-Carlo simulation is performed for the user portfolio with weights calculated according to number of shares s/he holds : '
    
     if len(user_stock) > 0:
-        template_title = f'{user_stock} Stock Analysis'
+        template_title = f'XPlytics: {user_stock} Stock Analysis'
         desc = f'Following Monte-Carlo simulation is performed for the hypothetical portfolio with {user_stock_weight*100}% weight for the stock {user_stock} and remaining {(1-user_stock_weight)*100}% weight for the existing portfolio of the user : '
     # Create dashboard using FastListTemplate from Panel Library
     

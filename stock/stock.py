@@ -12,6 +12,7 @@ from report.report import prepare_stock_report
 # user_stock_weight variable is potential weigth in the portfolio user wishes to analyse
 def perform_stock_analysis(user_stock, user_stock_weight, portfolio_df, user_df):
     
+    
     # prepare stock list for which we wish to retrieve data
     if user_stock in portfolio_df['ticker'].tolist():
         print('This stock is already in your portfolio!')
