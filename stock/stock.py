@@ -1,6 +1,7 @@
 import pandas as pd
 import yfinance as yf
 import numpy as np
+import questionary as qs
 from MCForecastTools import MCSimulation
 from portfolio.portfolio import perform_analysis
 from report.report import prepare_stock_report
@@ -10,8 +11,31 @@ from report.report import prepare_stock_report
 # portfolio_df  contains : tickers, number of shares for each ticker
 # user_stock variable is stock tickername that user wishes to perform analysis for
 # user_stock_weight variable is potential weigth in the portfolio user wishes to analyse
-def perform_stock_analysis(user_stock, user_stock_weight, portfolio_df, user_df):
-    
+def perform_stock_analysis(user_df, portfolio_df):
+    print('you are herer...')
+    while True:
+        try:
+            user_stock = qs.text(
+                    "Please enter the stock you would like to analyze"
+            ).ask().upper()
+            
+            ticker = yf.Ticker(user_stock)
+            if (ticker.info['regularMarketPrice'] == None):
+                raise NameError("You did not input a correct stock ticker! Try again.")
+            break
+        except Exception as ex:
+            print(ex)
+            
+    while True:
+        try:
+            user_stock_weight = float(qs.text(
+                "Please enter the potential weight you have in mind for this stock in your portfolio"
+            ).ask())
+            if(user_stock_weight>1):
+                raise NameError("Stock's weight can not be greater than 1")
+            break
+        except Exception as ex:
+            print(ex)
     
     # prepare stock list for which we wish to retrieve data
     if user_stock in portfolio_df['ticker'].tolist():

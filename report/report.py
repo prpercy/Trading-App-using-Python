@@ -57,11 +57,17 @@ def prepare_portfolio_report(results_dict):
         return name
 
     def company_desc(tickers_wd):
-        desc = pn.pane.Markdown(yf.Ticker(tickers_wd).info['longBusinessSummary'])
+        try:
+            desc = pn.pane.Markdown(yf.Ticker(tickers_wd).info['longBusinessSummary'])
+        except Exception as ex:
+            desc='Not available'
         return desc
 
     def company_website(tickers_wd):
-        website = pn.pane.Markdown(yf.Ticker(tickers_wd).info['website'])
+        try:
+            website = pn.pane.Markdown(yf.Ticker(tickers_wd).info['website'])
+        except Exception as ex:
+            website='Not available'
         return website
     
     #side bar data pull based on user option from ticker selection widget

@@ -100,9 +100,14 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
     pd.options.mode.chained_assignment = None
     
     if user_choice == 'Update available amount for trading':
-        user_funds = qs.text(
-            "Please enter the amount you would like to trade"
-        ).ask()
+        while True:
+            try:
+                user_funds = float(qs.text(
+                    "Please enter the amount you would like to trade"
+                ).ask())
+                break
+            except Exception as ex:
+                print("Please input only a number, no characters")
     
         user_df['user_available_to_trade'].iloc[0] = user_funds
         user_df = update_user_fund(user_df)
@@ -110,14 +115,8 @@ def execute_user_choice(user_df, portfolio_df, user_choice):
         print('updated the funds into database')
         
     elif user_choice == 'Stock Analysis':
-        print('perform stock analysis')
-        user_stock = qs.text(
-            "Please enter the stock you would like to analyze"
-        ).ask().upper()
-        user_stock_weight = float(qs.text(
-            "Please enter the potential weight you have in mind for this stock in your portfolio"
-        ).ask())
-        perform_stock_analysis(user_stock, user_stock_weight, portfolio_df, user_df)
+        print('perform stock analysis...')
+        perform_stock_analysis(user_df,portfolio_df)
         
     elif user_choice == 'Portfolio Analysis':
         print('perform portfolio analysis...')

@@ -17,11 +17,6 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
                     f'Please enter the stock you would like to {user_trade_choice}'
             ).ask().upper()
 
-            # Ask user how many shares of the given stock it would like to trade
-            no_of_stock = float(qs.text(
-                    f'Please enter the number of shares you would like to {user_trade_choice}'
-            ).ask())
-    
             # Get stock's current price using alpaca sdk
             current_stock_price = yf.Ticker(user_stock).history(period='1d')['Close'][0]
             break
@@ -29,8 +24,18 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             print(f'Incorrect stock Ticker name provided as input')
             print(ex)
          
-    # calculate total trade amount
-    trade_amount = no_of_stock*current_stock_price
+    while True:
+        try:
+            # Ask user how many shares of the given stock it would like to trade
+            no_of_stock = float(qs.text(
+                    f'Please enter the number of shares you would like to {user_trade_choice}'
+            ).ask())
+    
+            break
+        except Exception as ex:
+            print(f'Please enter a numerical value, not characters.')
+            print(ex)
+
     user_available_to_trade = float(user_df['user_available_to_trade'].iloc[0])
     
     # check if user portfolio has those stocks to buy/sell at the present (no naked short permissible at this moment)
@@ -40,6 +45,8 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
         return user_df, portfolio_df
     
     if user_trade_choice == 'Buy':
+        # calculate total trade amount
+        trade_amount = no_of_stock*current_stock_price
         # check if user's available trade amount is greater than stock trade amount 
         if user_available_to_trade >= trade_amount:
             #once trade amount is confirmed for purchase, amount will be deducted from total trading funds
@@ -73,8 +80,22 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
     else:
         number_of_shares = float(portfolio_df[portfolio_df['ticker'] == user_stock]['number_of_shares'])
         
+        # if user is trying to sell more shares than s/he has, prompt user about it and ask for new input
+        while True:
+            if no_of_stock > number_of_shares:
+                print(f'You do not have {no_of_stock} stocks of {user_stock} to sell. You can only sell upto {number_of_shares} stocks')
+                # Ask user how many shares of the given stock it would like to trade
+                no_of_stock = float(qs.text(
+                        f'Please enter the number of shares you would like to {user_trade_choice}'
+                ).ask())
+            else:
+                break
+        
+        # calculate total trade amount
+        trade_amount = no_of_stock*current_stock_price
+        
         #if the number of shares in their portfolio is equal to the number of stocks they are selling, then we will delete the stock from the portfolio
-        if no_of_stock >= number_of_shares:
+        if no_of_stock == number_of_shares:
             # once sell order meets requirements, will return a message of a successful sell of the "number" of the specific "stock"
             print(f' You sold {number_of_shares} stocks of {user_stock}')
             #will now drop the specific amount of shares from the portfolio data frame 
@@ -85,8 +106,8 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
             portfolio_sql_query = f"""
                 DELETE FROM portfolio WHERE ticker = '{user_stock}' AND user_name = '{user_df['user_name'].iloc[0]}'
             """
-        #if the number of shares in their portfolio is less than the number of stocks they are selling, then we will update the portfoliio with the new amount 
-        #of shares of the particular stock
+        #if the number of shares in their portfolio is less than the number of stocks they are selling, 
+        #then we will update the portfoliio with the new amount of shares of the particular stock
         else:
             print(f' You sold {no_of_stock} stocks of {user_stock}')
             portfolio_df.at[idx, 'number_of_shares'] = number_of_shares - no_of_stock
@@ -98,7 +119,6 @@ def perform_trade_stock(user_trade_choice,user_df, portfolio_df):
           
         # since its a sell. increase the available trade amount by sales proceeds
         user_df['user_available_to_trade'].iloc[0] = user_available_to_trade + trade_amount
-    #if there is a loss, we will decrease the available trade amount of sales loss
     
     #we will then update all transactions into the user dataframe
     user_sql_query = f"""
