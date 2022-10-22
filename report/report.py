@@ -23,6 +23,8 @@ import hvplot.pandas
 import seaborn as sns
 from bokeh.models import Button
 import sys
+from bokeh.models import GlyphRenderer, LinearAxis, LinearScale, Range1d
+
 
     
 # function to prepare visualzation of stock analysis report
@@ -78,15 +80,24 @@ def prepare_portfolio_report(results_dict):
     
     #prepare plots
     
-    prices_plot = prices_df.drop(columns = "SPY").interactive().hvplot(
+    ylimit = max(prices_df.drop(columns = ["PORTFOLIO"]).max())*1.1
+
+    prices_plot_1 = prices_df.drop(columns = ["PORTFOLIO"]).interactive().hvplot(
         title = "Historical Prices - 5 years",
-        ylabel = "Stock Price"
+        yaxis="left"
     )
+    
+    prices_plot_2 = prices_df['PORTFOLIO'].hvplot(
+        yaxis="right"
+    )
+    
+    prices_plot = (prices_plot_1.opts(ylim=(0, ylimit), ylabel = "Stock Price")*prices_plot_2).opts(hooks=[apply_second_yaxis], legend_position='left')
+    
     
     cum_returns_plot = cumulative_returns_df.interactive().hvplot(
         title = "Historical Cummulative Returns - 5 years",
         ylabel = "Return %"
-    )
+    ).opts(legend_position='left')
     
     #function for interactive ratios bar chart
 
@@ -105,7 +116,7 @@ def prepare_portfolio_report(results_dict):
     MC_hist = portfolio_2y_sim.plot_distribution()
     tbl_2y_summary_stats = portfolio_2y_sim.summarize_cumulative_return()
     tbl_2y_summary_stats.rename("Stat Values", inplace=True)
-    
+        
     # Compute summary statistics from the simulated daily returns
     dic_2y_simulated_returns = {'mean' : list(portfolio_2y_sim.simulated_return.mean(axis=1)),
                             'median': list(portfolio_2y_sim.simulated_return.median(axis=1)),
@@ -117,7 +128,7 @@ def prepare_portfolio_report(results_dict):
     df_2y_simulated_returns = pd.DataFrame(dic_2y_simulated_returns)
 
     # Use the 'plot' function to create a chart of the simulated cumulative returns
-    sim_plot = df_2y_simulated_returns.hvplot(title='2 year simulated cumulative returns')
+    sim_plot = df_2y_simulated_returns.interactive().hvplot(title='2 year simulated cumulative returns').opts(legend_position='left')
 
     
     # prepare template tile and description depending on whether its a stock analysis or portfolio analysis
@@ -153,8 +164,8 @@ def prepare_portfolio_report(results_dict):
             pn.Row(pn.Column(prices_plot, margin=(0,25)), cum_returns_plot), 
             pn.Row(pn.Column(df_widget, margin=(0,25)), ratios_bar),
             pn.Row(desc_pane, sizing_mode='stretch_width'),
-            pn.Row(pn.Column(MC_line_plot, margin=(0,25)),MC_hist),
-            pn.Row(pn.Column(sim_plot, margin=(0,25)),tbl_2y_summary_stats)
+            pn.Row(pn.Column(MC_line_plot, margin=(0,25)),sim_plot),
+            pn.Row(pn.Column(MC_hist, margin=(0,25)),tbl_2y_summary_stats)
         ],
         theme="dark"
     )
@@ -165,6 +176,17 @@ def prepare_portfolio_report(results_dict):
     
     return True
 
-
+# function to add secondary y axis to hvplot
+def apply_second_yaxis(plot, element):
     
-        
+    start, end = element.range(3)
+
+    p = plot.handles["plot"]
+    p.extra_y_scales = {"right": LinearScale()}
+    p.extra_y_ranges = {"right": Range1d(start=start, end=end*1.1)}
+    p.add_layout(LinearAxis(axis_label='Portfolio NAV',y_range_name="right"), "right")
+    
+     # find the last line and set it to right
+    lines = [p for p in p.renderers if isinstance(p, GlyphRenderer)]
+    lines[-1].y_range_name = "right"
+   
