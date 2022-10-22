@@ -136,7 +136,7 @@ class MCSimulation:
             
         # Use Pandas plot function to plot the return data
         plot_title = f"{self.nSim} Simulations of Cumulative Portfolio Return Trajectories Over the Next {self.nTrading} Trading Days."
-        return self.simulated_return.hvplot(legend=None,title=plot_title)
+        return self.simulated_return.hvplot(legend=False,title=plot_title)
     
     def plot_distribution(self):
         """
